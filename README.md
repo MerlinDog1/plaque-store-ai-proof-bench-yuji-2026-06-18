@@ -1,13 +1,14 @@
-# Plaque Store AI Proof Bench - 2026-06-18
+# Plaque Store AI Proof Bench - Yuji Copy - 2026-06-18
 
-Fresh, clearly labeled snapshot of the consumer-facing Plaque Store AI proof
-bench build as of 2026-06-18.
+Yuji-marked copy of the consumer-facing Plaque Store AI proof bench build as
+of 2026-06-18.
 
 Source snapshot:
 
 - original working repo: `MerlinDog1/plaque-store-ai-consumer`
 - source commit: `42bd86af2718f94fd2b15f75fb09f58edcb13758`
 - fresh repo label: `plaque-store-ai-proof-bench-2026-06-18`
+- Yuji copy label: `plaque-store-ai-proof-bench-yuji-2026-06-18`
 
 This snapshot includes the current proof-bench UI and the latest fixes:
 
