@@ -1,0 +1,43 @@
+{
+  "name": "plaque-store-ai-proof-bench-2026-06-18",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check:bold-toggle": "node scripts/check-bold-toggle.cjs",
+    "check:fixings-border-ui": "node scripts/check-fixings-border-ui.cjs",
+    "check:curved-scallop-border": "node scripts/check-curved-scallop-border.cjs",
+    "check:preview-geometry": "node scripts/check-preview-geometry.cjs",
+    "check:small-border-stroke": "node scripts/check-small-border-stroke.cjs",
+    "check:small-fixings": "node scripts/check-small-fixings.cjs",
+    "check:gemini": "node scripts/check-gemini-authored.cjs",
+    "check:pricing": "node scripts/check-pricing.cjs",
+    "check:symbols": "node scripts/check-symbol-ornaments.cjs",
+    "test:export-fidelity": "node scripts/validate-export-fidelity.mjs",
+    "preview": "node server.mjs",
+    "serve": "node server.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^1.31.0",
+    "@types/d3-contour": "^3.0.6",
+    "@types/d3-geo": "^3.1.0",
+    "d3-contour": "^4.0.2",
+    "d3-geo": "^3.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^22.14.0",
+    "@types/three": "^0.184.1",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
