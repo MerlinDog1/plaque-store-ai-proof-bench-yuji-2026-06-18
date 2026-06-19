@@ -937,12 +937,36 @@ const App: React.FC = () => {
               <div className="proofbench-mobile-top no-print md:hidden">
                 <div className="proofbench-rail-logo">P</div>
                 <div className="min-w-0 text-center">
-                  <p className="text-[11px] font-black text-[#f6ead2]">Proof Bench</p>
+                  <p className="text-[11px] font-black text-[#f6ead2]">{activeBrief.label}</p>
                   <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-[#a9b7ad]">{steps[activeStep]}</p>
                 </div>
                 <div className="proofbench-mobile-price" aria-label={`Current price ${formattedPrice} including UK delivery`}>
                   <span>Inc UK delivery</span>
                   <strong>{formattedPrice}</strong>
+                </div>
+              </div>
+
+              <div className="proofbench-mobile-director no-print md:hidden" aria-label="Creative director product briefs">
+                <div className="proofbench-mobile-director-head">
+                  <span>Creative Director</span>
+                  <strong>{activeBrief.deliverable}</strong>
+                </div>
+                <div className="proofbench-mobile-briefs">
+                  {STUDIO_BRIEFS.map((brief) => (
+                    <button
+                      type="button"
+                      key={brief.id}
+                      onClick={() => applyStudioBrief(brief)}
+                      className={brief.id === activeBriefId ? 'is-active' : ''}
+                      aria-pressed={brief.id === activeBriefId}
+                    >
+                      <span className="proofbench-brief-swatch" style={{ backgroundImage: `url(${brief.swatch})` }} />
+                      <span>
+                        <strong>{brief.label}</strong>
+                        <small>{brief.constraint}</small>
+                      </span>
+                    </button>
+                  ))}
                 </div>
               </div>
 
