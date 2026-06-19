@@ -43,9 +43,12 @@ type StudioBrief = {
   label: string;
   strapline: string;
   promise: string;
+  heroLine: string;
   material: Material;
   swatch: string;
   priceMood: string;
+  deliverable: string;
+  constraint: string;
   prompt: string;
   guidance: string;
   changes: Partial<PlaqueState>;
@@ -58,9 +61,12 @@ const STUDIO_BRIEFS: StudioBrief[] = [
     label: 'Portrait Memorial',
     strapline: 'warm, solemn, finished',
     promise: 'Preloads a brass memorial layout with portrait space, calm typography, safe margins, and proof-first guidance.',
+    heroLine: 'Family-ready memorial proof with portrait artwork built into the production surface.',
     material: Material.BrushedBrass,
     swatch: '/materials/brushed-brass-satin.png',
     priceMood: 'popular family choice',
+    deliverable: 'Brass + mahogany mount',
+    constraint: 'Portrait-safe text box',
     prompt: 'In loving memory of Margaret Ellis. Beloved wife, mum and grandmother. Her kindness lives on in every story we tell. 1948-2026.',
     guidance: 'Keep the tribute dignified and spacious. Prioritise a clear name line, restrained script accent, and generous space for a portrait on the left.',
     changes: {
@@ -91,9 +97,12 @@ const STUDIO_BRIEFS: StudioBrief[] = [
     label: 'Heritage Marker',
     strapline: 'civic, historic, permanent',
     promise: 'Sets up a formal heritage plaque with aged brass, border discipline, and a layout suited to public buildings.',
+    heroLine: 'Civic heritage marker with a formal hierarchy and restrained public-building finish.',
     material: Material.AgedBrass,
     swatch: '/materials/brushed-brass-satin.png',
     priceMood: 'architectural finish',
+    deliverable: 'Aged brass exterior plate',
+    constraint: 'Official title-first grid',
     prompt: 'The Old Mill House. Built in 1864 and restored for the community in 2026. A landmark of local craft, industry and renewal.',
     guidance: 'Make this feel official and old-world without becoming fussy. Strong title, balanced small caps, heritage ornament only if it earns its place.',
     changes: {
@@ -117,9 +126,12 @@ const STUDIO_BRIEFS: StudioBrief[] = [
     label: 'Bench Tribute',
     strapline: 'compact, readable, outdoor',
     promise: 'Preloads the correct compact bench format with no scalloped border and a short tribute that will actually fit.',
+    heroLine: 'Small outdoor bench plaque tuned for legibility, short copy, and unfussy manufacture.',
     material: Material.BrushedSteel,
     swatch: '/materials/brushed-stainless-satin.png',
     priceMood: 'outdoor durable',
+    deliverable: '150 x 50 mm steel strip',
+    constraint: 'Short-copy discipline',
     prompt: 'For Alan. Sit awhile, watch the trees, and remember the laughter.',
     guidance: 'This is a small bench plaque. Be ruthless with wording, keep it legible from arm length, and do not crowd the border.',
     changes: {
@@ -143,9 +155,12 @@ const STUDIO_BRIEFS: StudioBrief[] = [
     label: 'Opening Plaque',
     strapline: 'official, crisp, ceremony-ready',
     promise: 'Creates a polished presentation plaque for openings, donor walls, awards, and institutional moments.',
+    heroLine: 'Presentation-grade opening plaque with ceremony copy and boardroom polish.',
     material: Material.PolishedSteel,
     swatch: '/materials/mirror-stainless.png',
     priceMood: 'presentation grade',
+    deliverable: 'Mirror steel + oak mount',
+    constraint: 'Institutional hierarchy',
     prompt: 'Officially opened by Dr Amelia Hart on 18 June 2026. Celebrating innovation, service and a place built for the future.',
     guidance: 'Use a confident institutional hierarchy. Date and opener should be clear, with no sentimental styling.',
     changes: {
@@ -203,11 +218,15 @@ const App: React.FC = () => {
   const [hasAccess, setHasAccess] = useState(false);
   const [isCheckingAccess, setIsCheckingAccess] = useState(true);
   const [currentView, setCurrentView] = useState<'plaque' | 'vector'>('plaque');
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(STUDIO_BRIEFS[0].nextStep);
 
-  const [state, setState] = useState<PlaqueState>(PROOF_BENCH_INITIAL_STATE);
-  const [inscriptionPrompt, setInscriptionPrompt] = useState('');
-  const [inscriptionGuidance, setInscriptionGuidance] = useState('');
+  const [state, setState] = useState<PlaqueState>(() => ({
+    ...PROOF_BENCH_INITIAL_STATE,
+    ...STUDIO_BRIEFS[0].changes,
+    aiReasoning: 'Portrait Memorial brief is loaded. Generate the inscription layout to turn it into a production proof.',
+  }));
+  const [inscriptionPrompt, setInscriptionPrompt] = useState(STUDIO_BRIEFS[0].prompt);
+  const [inscriptionGuidance, setInscriptionGuidance] = useState(STUDIO_BRIEFS[0].guidance);
   const [generatedLayoutSignature, setGeneratedLayoutSignature] = useState<string | null>(null);
   const [isGeneratingLayout, setIsGeneratingLayout] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
@@ -852,7 +871,7 @@ const App: React.FC = () => {
                   <div>
                     <p>Creative Director</p>
                     <strong>{activeBrief.label}</strong>
-                    <span>{activeBrief.promise}</span>
+                    <span>{activeBrief.heroLine}</span>
                   </div>
                   <div className="proofbench-director-actions">
                     <button
@@ -891,6 +910,28 @@ const App: React.FC = () => {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              <div className="proofbench-product-dock no-print hidden md:grid" aria-label="Selected product production snapshot">
+                <div>
+                  <span>Product</span>
+                  <strong>{activeBrief.deliverable}</strong>
+                </div>
+                <div>
+                  <span>Constraint</span>
+                  <strong>{activeBrief.constraint}</strong>
+                </div>
+                <div>
+                  <span>Proof State</span>
+                  <strong>{isProductionReady ? 'Ready to export' : `${readinessWarnings.length} task${readinessWarnings.length === 1 ? '' : 's'} open`}</strong>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => applyStudioBrief(activeBrief)}
+                  aria-label={`Reset to ${activeBrief.label} director brief`}
+                >
+                  Reset brief
+                </button>
               </div>
 
               <div className="proofbench-mobile-top no-print md:hidden">

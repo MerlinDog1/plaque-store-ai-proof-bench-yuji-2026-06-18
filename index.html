@@ -1394,8 +1394,75 @@
       font-style: normal;
     }
 
+    .proofbench-product-dock {
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      bottom: 22px;
+      z-index: 14;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+      gap: 10px;
+      color: #17231f;
+      pointer-events: auto;
+    }
+
+    .proofbench-product-dock div,
+    .proofbench-product-dock button {
+      min-height: 58px;
+      border: 1px solid rgba(23, 32, 28, 0.12);
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(238, 241, 235, 0.78)),
+        linear-gradient(90deg, rgba(49, 108, 90, 0.13), rgba(245, 210, 123, 0.11));
+      box-shadow: 0 14px 34px rgba(26, 33, 29, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+    }
+
+    .proofbench-product-dock div {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 14px;
+    }
+
+    .proofbench-product-dock span {
+      color: #8a672c;
+      font-size: 8px;
+      font-weight: 950;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .proofbench-product-dock strong {
+      margin-top: 6px;
+      overflow: hidden;
+      color: #17231f;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: 0;
+      line-height: 1.15;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .proofbench-product-dock button {
+      min-width: 112px;
+      padding: 0 15px;
+      color: #f5d27b;
+      background: linear-gradient(180deg, rgba(23, 35, 31, 0.96), rgba(10, 18, 17, 0.94));
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
     @media (max-width: 1179px) {
       .proofbench-director-board {
+        display: none !important;
+      }
+
+      .proofbench-product-dock {
         display: none !important;
       }
 
@@ -1444,7 +1511,7 @@
 
     .proofbench-proof-pad {
       position: absolute;
-      inset: 142px 62px 44px 72px;
+      inset: 142px 62px 102px 72px;
       display: flex;
       align-items: center;
       justify-content: center;
