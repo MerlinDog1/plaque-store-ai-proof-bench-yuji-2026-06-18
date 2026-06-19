@@ -38,6 +38,137 @@ const PROOF_BENCH_INITIAL_STATE: PlaqueState = {
   typographyEngine: TypographyEngine.GeminiAuthored,
 };
 
+type StudioBrief = {
+  id: string;
+  label: string;
+  strapline: string;
+  promise: string;
+  material: Material;
+  swatch: string;
+  priceMood: string;
+  prompt: string;
+  guidance: string;
+  changes: Partial<PlaqueState>;
+  nextStep: number;
+};
+
+const STUDIO_BRIEFS: StudioBrief[] = [
+  {
+    id: 'memorial-portrait',
+    label: 'Portrait Memorial',
+    strapline: 'warm, solemn, finished',
+    promise: 'Preloads a brass memorial layout with portrait space, calm typography, safe margins, and proof-first guidance.',
+    material: Material.BrushedBrass,
+    swatch: '/materials/brushed-brass-satin.png',
+    priceMood: 'popular family choice',
+    prompt: 'In loving memory of Margaret Ellis. Beloved wife, mum and grandmother. Her kindness lives on in every story we tell. 1948-2026.',
+    guidance: 'Keep the tribute dignified and spacious. Prioritise a clear name line, restrained script accent, and generous space for a portrait on the left.',
+    changes: {
+      width: 297,
+      height: 210,
+      shape: Shape.Rect,
+      material: Material.BrushedBrass,
+      textColor: TextColor.Black,
+      designStyle: DesignStyle.MemorialSolemn,
+      border: true,
+      borderStyle: BorderStyle.Double,
+      fixing: Fixing.Caps,
+      capSize: 10,
+      wood: true,
+      woodTone: 'dark',
+      woodEdge: 'bevel',
+      memorialImageEnabled: true,
+      memorialImageMethod: MemorialImageMethod.Engraved,
+      memorialImagePlacement: MemorialImagePlacement.PortraitLeft,
+      memorialImageShape: MemorialImageShape.Circle,
+      memorialImageScale: 1.55,
+      safeMargin: 8,
+    },
+    nextStep: 5,
+  },
+  {
+    id: 'heritage-marker',
+    label: 'Heritage Marker',
+    strapline: 'civic, historic, permanent',
+    promise: 'Sets up a formal heritage plaque with aged brass, border discipline, and a layout suited to public buildings.',
+    material: Material.AgedBrass,
+    swatch: '/materials/brushed-brass-satin.png',
+    priceMood: 'architectural finish',
+    prompt: 'The Old Mill House. Built in 1864 and restored for the community in 2026. A landmark of local craft, industry and renewal.',
+    guidance: 'Make this feel official and old-world without becoming fussy. Strong title, balanced small caps, heritage ornament only if it earns its place.',
+    changes: {
+      width: 300,
+      height: 200,
+      shape: Shape.Rect,
+      material: Material.AgedBrass,
+      textColor: TextColor.Black,
+      designStyle: DesignStyle.HeritagePlaque,
+      border: true,
+      borderStyle: BorderStyle.Double,
+      fixing: Fixing.Screws,
+      wood: false,
+      memorialImageEnabled: false,
+      safeMargin: 9,
+    },
+    nextStep: 5,
+  },
+  {
+    id: 'bench-tribute',
+    label: 'Bench Tribute',
+    strapline: 'compact, readable, outdoor',
+    promise: 'Preloads the correct compact bench format with no scalloped border and a short tribute that will actually fit.',
+    material: Material.BrushedSteel,
+    swatch: '/materials/brushed-stainless-satin.png',
+    priceMood: 'outdoor durable',
+    prompt: 'For Alan. Sit awhile, watch the trees, and remember the laughter.',
+    guidance: 'This is a small bench plaque. Be ruthless with wording, keep it legible from arm length, and do not crowd the border.',
+    changes: {
+      width: 150,
+      height: 50,
+      shape: Shape.Rect,
+      material: Material.BrushedSteel,
+      textColor: TextColor.Black,
+      designStyle: DesignStyle.ModernMinimal,
+      border: true,
+      borderStyle: BorderStyle.Single,
+      fixing: Fixing.Screws,
+      wood: false,
+      memorialImageEnabled: false,
+      safeMargin: 7,
+    },
+    nextStep: 5,
+  },
+  {
+    id: 'opening-plaque',
+    label: 'Opening Plaque',
+    strapline: 'official, crisp, ceremony-ready',
+    promise: 'Creates a polished presentation plaque for openings, donor walls, awards, and institutional moments.',
+    material: Material.PolishedSteel,
+    swatch: '/materials/mirror-stainless.png',
+    priceMood: 'presentation grade',
+    prompt: 'Officially opened by Dr Amelia Hart on 18 June 2026. Celebrating innovation, service and a place built for the future.',
+    guidance: 'Use a confident institutional hierarchy. Date and opener should be clear, with no sentimental styling.',
+    changes: {
+      width: 300,
+      height: 200,
+      shape: Shape.Rect,
+      material: Material.PolishedSteel,
+      textColor: TextColor.Black,
+      designStyle: DesignStyle.Institutional,
+      border: true,
+      borderStyle: BorderStyle.Single,
+      fixing: Fixing.Caps,
+      capSize: 15,
+      wood: true,
+      woodTone: 'light',
+      woodEdge: 'square',
+      memorialImageEnabled: false,
+      safeMargin: 8,
+    },
+    nextStep: 5,
+  },
+];
+
 const readFileAsDataUrl = (file: File): Promise<string> => new Promise((resolve, reject) => {
   const reader = new FileReader();
   reader.onload = () => resolve(String(reader.result || ''));
@@ -91,6 +222,8 @@ const App: React.FC = () => {
   const [memorialStatus, setMemorialStatus] = useState<string | null>(null);
   const [proofSaved, setProofSaved] = useState(false);
   const [basketAdded, setBasketAdded] = useState(false);
+  const [activeBriefId, setActiveBriefId] = useState<string>('memorial-portrait');
+  const [guidedBriefMode, setGuidedBriefMode] = useState(true);
 
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -208,6 +341,34 @@ const App: React.FC = () => {
       }
       return next;
     });
+  };
+
+  const applyStudioBrief = (brief: StudioBrief) => {
+    setProofSaved(false);
+    setBasketAdded(false);
+    setActiveBriefId(brief.id);
+    setInscriptionPrompt(brief.prompt);
+    setInscriptionGuidance(brief.guidance);
+    setGeneratedLayoutSignature(null);
+    setMemorialStatus(
+      brief.changes.memorialImageEnabled
+        ? 'Brief loaded. Upload a portrait or generate artwork when you are ready.'
+        : null
+    );
+    setMemorialSourceImage(null);
+    setState(prev => ({
+      ...prev,
+      ...brief.changes,
+      generatedSvgContent: null,
+      aiReasoning: 'Studio brief loaded. Generate the inscription layout to turn it into a production proof.',
+      conceptImageUrl: null,
+      memorialImageSourceUrl: null,
+      memorialImageSvg: null,
+      memorialImagePreviewUrl: null,
+      etchmasterStyleReferenceUrl: null,
+    }));
+    setActiveStep(brief.nextStep);
+    setCurrentView('plaque');
   };
 
   const handleClearDesign = () => {
@@ -585,11 +746,13 @@ const App: React.FC = () => {
     currency: 'GBP',
     maximumFractionDigits: 0,
   });
+  const activeBrief = STUDIO_BRIEFS.find(brief => brief.id === activeBriefId) || STUDIO_BRIEFS[0];
 
   return (
     <div className="studio-app-shell proofbench-app flex flex-col bg-transparent text-[#eef4ee]">
       <Header
         onNavigate={setCurrentView}
+        currentView={currentView}
         priceLabel={formattedPrice}
       />
 
@@ -683,6 +846,53 @@ const App: React.FC = () => {
             </aside>
 
             <section className={`proofbench-stage relative row-start-1 min-h-0 min-w-0 overflow-hidden md:col-start-3 md:row-start-1 ${isProofExpanded ? 'is-expanded' : ''}`}>
+              <div className="proofbench-director-board no-print hidden md:flex">
+                <div className="proofbench-director-summary">
+                  <span className="proofbench-director-photo" aria-hidden="true" />
+                  <div>
+                    <p>Creative Director</p>
+                    <strong>{activeBrief.label}</strong>
+                    <span>{activeBrief.promise}</span>
+                  </div>
+                  <div className="proofbench-director-actions">
+                    <button
+                      type="button"
+                      className="is-primary"
+                      onClick={() => handleGenerateLayout(inscriptionPrompt.trim() || activeBrief.prompt)}
+                      disabled={isGeneratingLayout}
+                    >
+                      {isGeneratingLayout ? 'Generating' : 'Generate'}
+                    </button>
+                    <button
+                      type="button"
+                      className={guidedBriefMode ? 'is-active' : ''}
+                      onClick={() => setGuidedBriefMode(value => !value)}
+                      aria-pressed={guidedBriefMode}
+                    >
+                      {guidedBriefMode ? 'Guided' : 'Free'}
+                    </button>
+                  </div>
+                </div>
+                <div className="proofbench-brief-deck">
+                  {STUDIO_BRIEFS.map((brief) => (
+                    <button
+                      type="button"
+                      key={brief.id}
+                      onClick={() => applyStudioBrief(brief)}
+                      className={brief.id === activeBriefId ? 'is-active' : ''}
+                      aria-pressed={brief.id === activeBriefId}
+                    >
+                      <span className="proofbench-brief-swatch" style={{ backgroundImage: `url(${brief.swatch})` }} />
+                      <span className="proofbench-brief-copy">
+                        <strong>{brief.label}</strong>
+                        <small>{brief.strapline}</small>
+                      </span>
+                      <em>{brief.priceMood}</em>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="proofbench-mobile-top no-print md:hidden">
                 <div className="proofbench-rail-logo">P</div>
                 <div className="min-w-0 text-center">

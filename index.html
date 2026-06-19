@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plaque Store AI - Studio Proof Workstation</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2312352d'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-size='34' font-weight='800' fill='white'%3EP%3C/text%3E%3C/svg%3E" />
+  <title>Yuji Foundry - Agentic Plaque Proofing</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%2312352d'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-size='34' font-weight='800' fill='white'%3EY%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -1208,6 +1208,206 @@
       box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
     }
 
+    .proofbench-director-board {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      top: 18px;
+      z-index: 16;
+      min-height: 104px;
+      gap: 12px;
+      color: #17231f;
+      pointer-events: auto;
+    }
+
+    .proofbench-director-summary,
+    .proofbench-brief-deck button {
+      border: 1px solid rgba(23, 32, 28, 0.13);
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 242, 233, 0.78)),
+        linear-gradient(90deg, rgba(245, 210, 123, 0.16), rgba(65, 101, 87, 0.08));
+      box-shadow: 0 18px 44px rgba(26, 33, 29, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.74);
+      backdrop-filter: blur(18px);
+    }
+
+    .proofbench-director-summary {
+      display: grid;
+      width: min(40%, 430px);
+      min-width: 340px;
+      grid-template-columns: 88px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .proofbench-director-photo {
+      display: block;
+      width: 88px;
+      height: 78px;
+      border: 1px solid rgba(23, 32, 28, 0.14);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.0), rgba(23, 32, 28, 0.18)),
+        url('/brand/product-studio-hero.webp') center / cover;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 12px 28px rgba(26, 33, 29, 0.16);
+    }
+
+    .proofbench-director-summary p,
+    .proofbench-brief-deck em {
+      color: #8a672c;
+      font-size: 9px;
+      font-weight: 950;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .proofbench-director-summary strong {
+      display: block;
+      margin-top: 3px;
+      color: #17231f;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .proofbench-director-summary span {
+      display: -webkit-box;
+      margin-top: 5px;
+      overflow: hidden;
+      color: #526058;
+      font-size: 11px;
+      font-weight: 750;
+      line-height: 1.35;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .proofbench-director-actions {
+      display: grid;
+      gap: 7px;
+    }
+
+    .proofbench-director-summary button {
+      min-height: 36px;
+      border: 1px solid rgba(23, 32, 28, 0.14);
+      border-radius: 999px;
+      padding: 0 12px;
+      background: rgba(255, 255, 255, 0.64);
+      color: #34443d;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .proofbench-director-summary button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+    }
+
+    .proofbench-director-summary button.is-primary {
+      border-color: rgba(23, 32, 28, 0.22);
+      background: #17231f;
+      color: #f5d27b;
+    }
+
+    .proofbench-director-summary button.is-active {
+      border-color: rgba(245, 210, 123, 0.72);
+      background: rgba(245, 210, 123, 0.28);
+      color: #17231f;
+    }
+
+    .proofbench-brief-deck {
+      display: grid;
+      flex: 1;
+      min-width: 0;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .proofbench-brief-deck button {
+      display: grid;
+      min-width: 0;
+      min-height: 104px;
+      grid-template-columns: 46px minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      gap: 8px 10px;
+      padding: 11px;
+      text-align: left;
+      transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .proofbench-brief-deck button:hover,
+    .proofbench-brief-deck button.is-active {
+      border-color: rgba(138, 103, 44, 0.52);
+      transform: translateY(-1px);
+      box-shadow: 0 22px 52px rgba(26, 33, 29, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .proofbench-brief-deck button.is-active {
+      background:
+        linear-gradient(180deg, rgba(255, 250, 229, 0.96), rgba(239, 225, 189, 0.88)),
+        linear-gradient(90deg, rgba(65, 101, 87, 0.12), transparent);
+    }
+
+    .proofbench-brief-swatch {
+      display: block;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(23, 32, 28, 0.14);
+      border-radius: 8px;
+      background-position: center;
+      background-size: cover;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54), 0 10px 20px rgba(26, 33, 29, 0.12);
+    }
+
+    .proofbench-brief-copy {
+      min-width: 0;
+    }
+
+    .proofbench-brief-copy strong {
+      display: block;
+      overflow: hidden;
+      color: #17231f;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .proofbench-brief-copy small {
+      display: -webkit-box;
+      margin-top: 4px;
+      overflow: hidden;
+      color: #526058;
+      font-size: 10px;
+      font-weight: 850;
+      line-height: 1.25;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .proofbench-brief-deck em {
+      grid-column: 1 / -1;
+      align-self: end;
+      font-style: normal;
+    }
+
+    @media (max-width: 1179px) {
+      .proofbench-director-board {
+        display: none !important;
+      }
+
+      .proofbench-proof-pad {
+        inset: 48px 62px 44px 72px !important;
+      }
+
+      .proofbench-dimension-top {
+        top: 74px !important;
+      }
+    }
+
     .proofbench-canvas-toolbar {
       position: absolute;
       left: 0;
@@ -1244,7 +1444,7 @@
 
     .proofbench-proof-pad {
       position: absolute;
-      inset: 48px 62px 44px 72px;
+      inset: 142px 62px 44px 72px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1351,7 +1551,7 @@
     .proofbench-dimension-top {
       left: 18%;
       right: 18%;
-      top: 74px;
+      top: 150px;
       text-align: center;
       border-top: 1px dashed rgba(41, 52, 47, 0.36);
     }
